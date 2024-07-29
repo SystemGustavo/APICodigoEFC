@@ -10,7 +10,6 @@ namespace APICodigoEFC.Controllers
     [ApiController]
     public class InvoicesController : ControllerBase
     {
-
         private readonly CodigoContext _context;
 
         public InvoicesController(CodigoContext context)
