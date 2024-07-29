@@ -17,24 +17,24 @@ namespace APICodigoEFC.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public List<Invoice> GetByFilters(string? number)
-        {
-            IQueryable<Invoice> query = _context.Invoices.Include(x => x.Customer).Where(x => x.IsActive);
+        //[HttpGet]
+        //public List<Invoice> GetByFilters(string? number)
+        //{
+        //    IQueryable<Invoice> query = _context.Invoices.Include(x => x.Customer).Where(x => x.IsActive);
 
-            if (!string.IsNullOrEmpty(number))
-                query = query.Where(x => x.Number.Contains(number));
+        //    if (!string.IsNullOrEmpty(number))
+        //        query = query.Where(x => x.Number.Contains(number));
        
 
-            return query.ToList();
-        }
+        //    return query.ToList();
+        //}
 
-        [HttpPost]
-        public void Insert([FromBody] Invoice invoice)
-        {
-            _context.Invoices.Add(invoice);
-            _context.SaveChanges();
-        }
+        //[HttpPost]
+        //public void Insert([FromBody] Invoice invoice)
+        //{
+        //    _context.Invoices.Add(invoice);
+        //    _context.SaveChanges();
+        //}
 
     }
 }
