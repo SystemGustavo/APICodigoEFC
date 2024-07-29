@@ -69,20 +69,18 @@ namespace Services.Services
             }
         }
 
-        public IEnumerable<Detail> Get()
+        public IEnumerable<Detail> GetByInvoiceNumber(string? invoiceNumber)
         {
             IQueryable<Detail> query = _context.Details
-                                     .Include(x => x.Product)
-                                     .Include(x => x.Invoice)
-                                     .Where(x => x.IsActive);
-            //Logica de Negocio
-            if (!query.Any())
-                return Enumerable.Empty<Detail>();
-            else
-                return query.ToList();
-        }
+                .Include(x => x.Product)
+                .Include(x => x.Invoice)
+                .Where(x => x.IsActive);
+            if (!string.IsNullOrEmpty(invoiceNumber))
+                query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
 
-        public IEnumerable<Detail> GetByFilters(int? DetailId)
+            return query.ToList();
+        }
+        public IEnumerable<Detail> GetByDetailId(int? DetailId)
         {
             IQueryable<Detail> query = _context.Details
                                      .Include(x => x.Product)
@@ -93,6 +91,32 @@ namespace Services.Services
                 return Enumerable.Empty<Detail>();
             else
                 return query.ToList();
+        }
+
+        public IEnumerable<Detail> GetByFilters(string? customerName,string? invoiceNumber)
+        {
+            IQueryable<Detail> query = _context.Details
+               .Include(x => x.Product)
+               .Include(x => x.Invoice).ThenInclude(y => y.Customer)
+               .Where(x => x.IsActive);
+
+            if (!string.IsNullOrEmpty(customerName))
+                query = query.Where(x => x.Invoice.Customer.Name.Contains(customerName));
+            if (!string.IsNullOrEmpty(invoiceNumber))
+                query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
+
+            return query.ToList();
+        }
+
+        public IEnumerable<Detail> GetByInvoiceNumber2(string? invoiceNumber)
+        {
+            IQueryable<Detail> query = _context.Details
+               .Include(x => x.Product)
+               .Include(x => x.Invoice)
+               .Where(x => x.IsActive);
+            if (!string.IsNullOrEmpty(invoiceNumber))
+                query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
+            return query.ToList();
         }
 
     }

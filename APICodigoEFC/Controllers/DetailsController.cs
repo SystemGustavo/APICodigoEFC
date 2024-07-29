@@ -65,124 +65,73 @@ namespace APICodigoEFC.Controllers
             _detailsService.Delete(id);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public List<DetailGetRequest> GetAllDetail()
-        {
-            var ListDetails =  _detailsService.Get();
-            List<DetailGetRequest> detailsGet = new List<DetailGetRequest>();
-            foreach (var item in ListDetails)
-            {
-                detailsGet.Add(new DetailGetRequest
-                {
-                    DetailID = item.DetailID,
-                    Amount = item.Amount,
-                    Price = item.Price,
-                    SubTotal = item.SubTotal,
-                    Product = item.Product.Name,
-                    Invoice = item.Invoice.Description
-                });
-            }
-            return detailsGet;
-
-        }
-
         [HttpGet("{DetailId}")]
-        [AllowAnonymous]
-        public List<DetailGetRequest> GetByFilters(int? DetailId)
+        public List<DetailGetRequest> GetByDetailId(int? DetailId)
         {
-            var ListDetails = _detailsService.GetByFilters(DetailId);
-            List<DetailGetRequest> detailsGet = new List<DetailGetRequest>();
-            foreach (var item in ListDetails)
-            {
-                detailsGet.Add(new DetailGetRequest
-                {
-                    DetailID = item.DetailID,
-                    Amount = item.Amount,
-                    Price = item.Price,
-                    SubTotal = item.SubTotal,
-                    Product = item.Product.Name,
-                    Invoice = item.Invoice.Description
-                });
-            }
-            return detailsGet;
+            var ListDetailsResponse = _detailsService.GetByDetailId(DetailId)
+                                              .Select(x => new DetailGetRequest
+                                              {
+                                                 DetailID = x.DetailID,
+                                                 Amount = x.Amount,
+                                                 Price = x.Price,
+                                                 SubTotal = x.SubTotal,
+                                                 Product = x.Product.Name,
+                                                 Invoice = x.Invoice.Description
+                                              }).ToList();
+            
+            return ListDetailsResponse;
         }
 
-        //    return query.ToList();
-        //}
+
+
         //Listar todos los detalles y buscar por nombre de cliente.
-        //[HttpGet]
-        //public List<Detail> GetByFilters(string? customerName, string? invoiceNumber)
-        //{
-        //    IQueryable<Detail> query = _context.Details
-        //       .Include(x => x.Product)
-        //       .Include(x => x.Invoice).ThenInclude(y => y.Customer)
-        //       .Where(x => x.IsActive);
-
-        //    if (!string.IsNullOrEmpty(customerName))
-        //        query = query.Where(x => x.Invoice.Customer.Name.Contains(customerName));
-        //    if (!string.IsNullOrEmpty(invoiceNumber))
-        //        query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
-
-
-        //    return query.ToList();
-        //}
-
-
-        //[HttpGet]
-        //public List<DetailResponseV1> GetByInvoiceNumber(string? invoiceNumber)
-        //{
-
-        //    IQueryable<Detail> query = _context.Details
-        //        .Include(x => x.Product)
-        //        .Include(x => x.Invoice)
-        //        .Where(x => x.IsActive);
-        //    if (!string.IsNullOrEmpty(invoiceNumber))
-        //        query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
-
-        //    //Todos los detalles del modelo
-        //    var details = query.ToList();
+        [HttpGet]
+        public List<DetailGetRequest> GetByFilters(string? customerName, string? invoiceNumber)
+        {
+            var ListDetailsResponse = _detailsService.GetByFilters(customerName, invoiceNumber)
+                                                     .Select(x => new DetailGetRequest
+                                                     {
+                                                         DetailID = x.DetailID,
+                                                         Amount = x.Amount,
+                                                         Price = x.Price,
+                                                         SubTotal = x.SubTotal,
+                                                         CustomerName = x.Invoice.Customer.Name,
+                                                         Product = x.Product.Name,
+                                                         Invoice = x.Invoice.Description
+                                                     }).ToList();
+            return ListDetailsResponse;
+        }
 
 
-        //    //Convertir modelo al response
-        //    var response = details
-        //                   .Select(x => new DetailResponseV1                            
-        //                   {            
-        //                    InvoiceNumber=x.Invoice.Number,
-        //                    ProductName=x.Product.Name,
-        //                    SubTotal=x.SubTotal
-        //                    }).ToList();
+        [HttpGet]
+        public List<DetailResponseV1> GetByInvoiceNumber(string? invoiceNumber)
+        {
+            //Convertir modelo al response
+            var response = _detailsService.GetByInvoiceNumber(invoiceNumber)
+                           .Select(x => new DetailResponseV1
+                           {
+                               InvoiceNumber = x.Invoice.Number,
+                               ProductName = x.Product.Name,
+                               SubTotal = x.SubTotal
+                           }).ToList();
+            return response;
+        }
 
-        //    return response;
-        //}
+        [HttpGet]
+        public List<DetailResponseV2> GetByInvoiceNumber2(string? invoiceNumber)
+        {
+            //Convertir modelo al response
+            var response = _detailsService.GetByInvoiceNumber2(invoiceNumber)
+                                          .Select(x => new DetailResponseV2
+                                          {
+                                              InvoiceNumber = x.Invoice.Number,
+                                              ProductName = x.Product.Name,
+                                              Amount = x.Amount,
+                                              Price = x.Price,
+                                              IGV = x.Amount * x.Price * Constants.IGV
+                                          }).ToList();
 
-        //[HttpGet]
-        //public List<DetailResponseV2> GetByInvoiceNumber2(string? invoiceNumber)
-        //{
-
-        //    IQueryable<Detail> query = _context.Details
-        //        .Include(x => x.Product)
-        //        .Include(x => x.Invoice)
-        //        .Where(x => x.IsActive);
-        //    if (!string.IsNullOrEmpty(invoiceNumber))
-        //        query = query.Where(x => x.Invoice.Number.Contains(invoiceNumber));
-
-        //    //Todos los detalles del modelo
-        //    var details = query.ToList();
-
-
-        //    //Convertir modelo al response
-        //    var response = details
-        //                   .Select(x => new DetailResponseV2
-        //                   {
-        //                       InvoiceNumber = x.Invoice.Number,
-        //                       ProductName = x.Product.Name,
-        //                       Amount = x.Amount,
-        //                       Price=x.Price,
-        //                       IGV=x.Amount*x.Price*Constants.IGV
-        //                   }).ToList();
-
-        //    return response;
-        //}
+            return response;
+        }
     }
 }
