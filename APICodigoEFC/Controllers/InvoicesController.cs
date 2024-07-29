@@ -79,7 +79,7 @@ namespace APICodigoEFC.Controllers
             _invoiceService.Update(invoice);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
             _invoiceService.Delete(id);
