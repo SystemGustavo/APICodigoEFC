@@ -1,7 +1,9 @@
-﻿using APICodigoEFC.Context;
-using APICodigoEFC.Models;
+﻿using Infraestructure.Context;
+using Domain.Models;
 using APICodigoEFC.Response;
 using APICodigoEFC.Utility;
+using Domain.Models;
+using Infraestructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
