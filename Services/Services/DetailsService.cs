@@ -80,18 +80,6 @@ namespace Services.Services
 
             return query.ToList();
         }
-        public IEnumerable<Detail> GetByDetailId(int? DetailId)
-        {
-            IQueryable<Detail> query = _context.Details
-                                     .Include(x => x.Product)
-                                     .Include(x => x.Invoice)
-                                     .Where(x => x.DetailID == DetailId);
-            //Logica de Negocio
-            if (!query.Any())
-                return Enumerable.Empty<Detail>();
-            else
-                return query.ToList();
-        }
 
         public IEnumerable<Detail> GetByFilters(string? customerName,string? invoiceNumber)
         {

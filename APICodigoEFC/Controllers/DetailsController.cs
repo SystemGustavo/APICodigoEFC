@@ -65,25 +65,6 @@ namespace APICodigoEFC.Controllers
             _detailsService.Delete(id);
         }
 
-        [HttpGet("{DetailId}")]
-        public List<DetailGetRequest> GetByDetailId(int? DetailId)
-        {
-            var ListDetailsResponse = _detailsService.GetByDetailId(DetailId)
-                                              .Select(x => new DetailGetRequest
-                                              {
-                                                 DetailID = x.DetailID,
-                                                 Amount = x.Amount,
-                                                 Price = x.Price,
-                                                 SubTotal = x.SubTotal,
-                                                 Product = x.Product.Name,
-                                                 Invoice = x.Invoice.Description
-                                              }).ToList();
-            
-            return ListDetailsResponse;
-        }
-
-
-
         //Listar todos los detalles y buscar por nombre de cliente.
         [HttpGet]
         public List<DetailGetRequest> GetByFilters(string? customerName, string? invoiceNumber)
