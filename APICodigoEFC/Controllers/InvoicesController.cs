@@ -3,6 +3,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Services;
 
 namespace APICodigoEFC.Controllers
 {
@@ -11,10 +12,12 @@ namespace APICodigoEFC.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly CodigoContext _context;
+        private InvoicesService _invoiceService;
 
         public InvoicesController(CodigoContext context)
         {
             _context = context;
+            _invoiceService = new InvoicesService(_context);
         }
 
         //[HttpGet]

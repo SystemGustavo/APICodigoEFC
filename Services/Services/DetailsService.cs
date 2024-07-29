@@ -39,7 +39,7 @@ namespace Services.Services
             var invoices = _context.Invoices.Find(detail.InvoiceID);
 
             //Logica de Negocio
-            if(details != null)
+            if (details!=null && products != null && invoices != null)
             {
                 //mapear 
                 details.DetailID = detail.DetailID;
@@ -50,11 +50,8 @@ namespace Services.Services
                 details.ProductID = detail.ProductID;
                 details.InvoiceID = detail.InvoiceID;
 
-                if (products != null && invoices != null)
-                {
-                    _context.Entry(details).State = EntityState.Modified;
-                    _context.SaveChanges();
-                }
+                _context.Entry(details).State = EntityState.Modified;
+                _context.SaveChanges();
             }
         }
 

@@ -89,12 +89,12 @@ namespace APICodigoEFC.Controllers
         {
             //Convertir modelo al response
             var response = _detailsService.GetByInvoiceNumber(invoiceNumber)
-                           .Select(x => new DetailResponseV1
-                           {
-                               InvoiceNumber = x.Invoice.Number,
-                               ProductName = x.Product.Name,
-                               SubTotal = x.SubTotal
-                           }).ToList();
+                                          .Select(x => new DetailResponseV1
+                                          {
+                                              InvoiceNumber = x.Invoice.Number,
+                                              ProductName = x.Product.Name,
+                                              SubTotal = x.SubTotal
+                                          }).ToList();
             return response;
         }
 
@@ -111,7 +111,6 @@ namespace APICodigoEFC.Controllers
                                               Price = x.Price,
                                               IGV = x.Amount * x.Price * Constants.IGV
                                           }).ToList();
-
             return response;
         }
     }
