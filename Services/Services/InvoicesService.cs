@@ -68,7 +68,7 @@ namespace Services.Services
 
         public IEnumerable<Invoice> Get()
         {
-            IQueryable<Invoice> query = _context.Invoices.Where(x => x.IsActive == true);
+            IQueryable<Invoice> query = _context.Invoices.Include(x=>x.Customer).Where(x => x.IsActive);
             return query.ToList();
         }
     }

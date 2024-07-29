@@ -1,8 +1,8 @@
 ﻿using Domain.Models;
 
-namespace APICodigoEFC.Request
+namespace APICodigoEFC.Response
 {
-    public class DetailGetRequest
+    public class DetailResponse
     {
         public int DetailID { get; set; }
         public int Amount { get; set; }

@@ -67,10 +67,10 @@ namespace APICodigoEFC.Controllers
 
         //Listar todos los detalles y buscar por nombre de cliente.
         [HttpGet]
-        public List<DetailGetRequest> GetByFilters(string? customerName, string? invoiceNumber)
+        public List<DetailResponse> GetByFilters(string? customerName, string? invoiceNumber)
         {
             var ListDetailsResponse = _detailsService.GetByFilters(customerName, invoiceNumber)
-                                                     .Select(x => new DetailGetRequest
+                                                     .Select(x => new DetailResponse
                                                      {
                                                          DetailID = x.DetailID,
                                                          Amount = x.Amount,

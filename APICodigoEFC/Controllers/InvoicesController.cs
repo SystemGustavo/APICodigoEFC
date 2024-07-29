@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
+using APICodigoEFC.Request;
+using APICodigoEFC.Response;
 
 namespace APICodigoEFC.Controllers
 {
@@ -20,24 +22,68 @@ namespace APICodigoEFC.Controllers
             _invoiceService = new InvoicesService(_context);
         }
 
-        //[HttpGet]
-        //public List<Invoice> GetByFilters(string? number)
-        //{
-        //    IQueryable<Invoice> query = _context.Invoices.Include(x => x.Customer).Where(x => x.IsActive);
+        [HttpGet]
+        public List<InvoiceResponse> Get()
+        {
+            var query = _invoiceService.Get()
+                                    .Select(x => new InvoiceResponse
+                                    {
+                                        InvoiceID = x.InvoiceID,
+                                        Number = x.Number,
+                                        Description = x.Description,
+                                        CustomerName = x.Customer.Name,
+                                    }).ToList();
+            return query;
+        }
 
-        //    if (!string.IsNullOrEmpty(number))
-        //        query = query.Where(x => x.Number.Contains(number));
-       
+        [HttpGet]
+        public List<InvoiceResponse> GetByFilters(string? number)
+        {
+            var query = _invoiceService.GetByFilters(number)
+                                                     .Select(x => new InvoiceResponse
+                                                     {
+                                                         InvoiceID = x.InvoiceID,
+                                                         Number = x.Number,
+                                                         Description = x.Description,
+                                                         CustomerName = x.Customer.Name,
+                                                     }).ToList();
+            return query;
+        }
 
-        //    return query.ToList();
-        //}
+        [HttpPost]
+        public void Insert([FromBody] InvoiceInsertRequest request)
+        {
+            var invoice = new Invoice
+            {
+                Number = request.Number,
+                Description = request.Description,
+                CustomerID = request.CustomerID,
+                IsActive = true,
+            };
 
-        //[HttpPost]
-        //public void Insert([FromBody] Invoice invoice)
-        //{
-        //    _context.Invoices.Add(invoice);
-        //    _context.SaveChanges();
-        //}
+            _invoiceService.Insert(invoice);
+        }
+
+        [HttpPut]
+        public void Update([FromBody] InvoiceUpdateRequest request)
+        {
+            var invoice = new Invoice
+            {
+                InvoiceID = request.InvoiceID,
+                Number = request.Number,
+                Description = request.Description,
+                CustomerID = request.CustomerID,
+                IsActive = true,
+            };
+
+            _invoiceService.Update(invoice);
+        }
+
+        [HttpDelete("{Id}")]
+        public void Delete(int id)
+        {
+            _invoiceService.Delete(id);
+        }
 
     }
 }
